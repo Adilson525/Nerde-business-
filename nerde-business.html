@@ -1,0 +1,136 @@
+
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nerde Business</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #0f0f0f;
+      color: #ffffff;
+      margin: 0;
+      padding: 20px;
+    }
+    h1, h2 {
+      color: #22c55e;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+    }
+    .form {
+      background: #1f1f1f;
+      padding: 20px;
+      border-radius: 10px;
+    }
+    input, textarea, button {
+      width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+    }
+    button {
+      background-color: #22c55e;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .produto {
+      background: #181818;
+      border: 1px solid #333;
+      margin-top: 15px;
+      padding: 15px;
+      border-radius: 10px;
+    }
+    .produto h3 {
+      margin: 0;
+      color: #86efac;
+    }
+    .produto p {
+      margin: 5px 0;
+    }
+    .produto .preco {
+      color: #facc15;
+      font-weight: bold;
+    }
+    .produto a {
+      color: #22d3ee;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 10px;
+    }
+    footer {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 0.9em;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🛍️ Nerde Business</h1>
+    <p>Venda de produtos digitais com pagamento em Kwanzas (AOA)</p>
+
+    <div class="form">
+      <h2>Cadastrar Produto</h2>
+      <input type="text" id="nome" placeholder="Nome do Produto">
+      <textarea id="descricao" placeholder="Descrição do Produto"></textarea>
+      <input type="number" id="preco" placeholder="Preço em Kz">
+      <button onclick="cadastrarProduto()">Cadastrar</button>
+    </div>
+
+    <h2>📦 Produtos</h2>
+    <div id="lista-produtos"></div>
+
+    <footer>
+      Pagamento via Multicaixa Express ou Transferência Bancária | WhatsApp: +244 953511618
+    </footer>
+  </div>
+
+  <script>
+    const produtos = JSON.parse(localStorage.getItem("produtos") || "[]");
+
+    function salvar() {
+      localStorage.setItem("produtos", JSON.stringify(produtos));
+    }
+
+    function renderizar() {
+      const lista = document.getElementById("lista-produtos");
+      lista.innerHTML = "";
+      produtos.forEach((p, i) => {
+        const el = document.createElement("div");
+        el.className = "produto";
+        el.innerHTML = `
+          <h3>${p.nome}</h3>
+          <p>${p.descricao}</p>
+          <p class="preco">💵 ${p.preco} Kz</p>
+          <a href="https://wa.me/244953511618?text=Olá! Quero comprar: ${encodeURIComponent(p.nome)}" target="_blank">📲 Comprar via WhatsApp</a>
+        `;
+        lista.appendChild(el);
+      });
+    }
+
+    function cadastrarProduto() {
+      const nome = document.getElementById("nome").value;
+      const descricao = document.getElementById("descricao").value;
+      const preco = document.getElementById("preco").value;
+
+      if (!nome || !preco) return alert("Preencha nome e preço!");
+
+      produtos.push({ nome, descricao, preco });
+      salvar();
+      renderizar();
+
+      document.getElementById("nome").value = "";
+      document.getElementById("descricao").value = "";
+      document.getElementById("preco").value = "";
+    }
+
+    renderizar();
+  </script>
+</body>
+</html>
